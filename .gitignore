@@ -1,0 +1,33 @@
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.key
+*.pem
+*.p12
+*.pfx
+.pgpass
+pgpass.conf
+
+# Dependências e builds
+node_modules/
+target/
+dist/
+*.tsbuildinfo
+
+# Dados locais e backups do banco
+/database/data/
+/database/backups/
+*.dump
+
+# Artefatos de ferramentas e testes
+.playwright-mcp/
+playwright-report/
+test-results/
+.codegraph/
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
