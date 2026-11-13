@@ -10,6 +10,9 @@
 .pgpass
 pgpass.conf
 
+# Ferramentas isoladas deste projeto
+/.tools/
+
 # Dependências e builds
 node_modules/
 target/
@@ -22,6 +25,7 @@ dist/
 *.dump
 
 # Artefatos de ferramentas e testes
+.superpowers/
 .playwright-mcp/
 playwright-report/
 test-results/
@@ -31,3 +35,7 @@ test-results/
 # Sistema operacional
 .DS_Store
 Thumbs.db
+
+# IDE
+.idea/
+*.iml

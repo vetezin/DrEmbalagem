@@ -15,7 +15,7 @@ Não interpretar aprovação da inicialização ou da stack como aprovação de 
 - Uma aplicação web online, com experiências adaptadas à coleta no celular e à análise no computador. Não apenas reduzir o dashboard para caber no celular.
 - Sem aplicativo nativo, coleta offline, SQLite ou sincronização offline nesta fase.
 - Cadastro de empresas, consultorias, ambientes e equipamentos, cálculos e exportação Excel aparecem nos materiais existentes. Detalhes e critérios de aceite precisam ser conferidos antes de implementar cada fluxo.
-- Estoque, portal externo de clientes, assinaturas e compras automatizadas permanecem fora do MVP descrito no documento de iniciação, salvo nova aprovação.
+- Estoque, portal externo de clientes, assinaturas e compras automatizadas permanecem fora do MVP descrito no documento de iniciação, salvo nova aprovação. Estoque previsto provisoriamente para a Fase 2, com inclusão e escopo ainda sujeitos à validação. Fase 3 reunirá as funcionalidades de uso externo a desenvolver posteriormente, incluindo acesso das empresas clientes. Isso define a fase, não aprova funcionalidades externas ainda não especificadas.
 
 Referências locais:
 
@@ -98,6 +98,8 @@ usuario/
 
 ### Convenções
 
+- Não usar `var`; declarar o tipo real em variáveis locais, parâmetros e retornos.
+- Enums de cada domínio devem ficar em pacote `enums` do domínio (ex.: `usuario/enums`), não em `model`.
 - Preferir DTOs em `record`. DTO simples pode ser recebido pelo Service sem criar um objeto idêntico apenas por formalidade.
 - Conversões triviais podem usar `fromModel`; não introduzir biblioteca ou camada de mapper sem necessidade.
 - Injeção por construtor, dependências `final` e `@RequiredArgsConstructor` quando apropriado. Sem injeção em atributos.
@@ -146,13 +148,16 @@ usuario/
 
 - Adiamento da discussão de perfis não autoriza endpoints desprotegidos. Definir autenticação e autorização antes de disponibilizar dados reais na internet.
 - Identidade e permissões verificadas no servidor; não confiar em usuário, papel ou proprietário enviados pelo frontend.
-- Não confundir empresa atendida com eventual organização proprietária dos dados. Isolamento e escopo de acesso ainda precisam de definição.
+- Evolução futura aprovada como direção de produto, fora do MVP: empresas clientes poderão ter usuários individuais vinculados à própria empresa para realizar suas próprias consultorias. Considerar esses vínculos e o isolamento dos dados na modelagem inicial, sem implementar acesso externo por antecipação. Realizar consultorias para outras empresas não integra esse escopo previsto.
+- Não confundir empresa atendida com organização proprietária dos dados. Regras detalhadas de acesso, permissões, administração dos vínculos e transição dos dados coletados pela Doutor Embalagem ainda precisam de definição antes do acesso externo.
 - HTTPS, segredos fora do código, banco sem exposição pública e logs sem credenciais ou dados pessoais desnecessários.
 - Definir CORS por origens autorizadas; CORS não substitui autenticação. Política CSRF depende do mecanismo de sessão escolhido.
 - Testar regras e transações nos Services, contratos HTTP/validação, persistência com PostgreSQL real isolado e segurança conforme o fluxo.
 - Mock de Repository não comprova SQL, mapeamentos ou constraints; build não comprova comportamento.
 - Validar fluxos funcionais do frontend no navegador, incluindo celular e computador, erros e acessibilidade pertinente.
 - Não executar testes destrutivos contra produção. Não declarar validações que não foram executadas.
+- Antes de qualquer teste que dependa de backend, frontend ou banco em execução, pedir ao responsável que inicie os serviços e confirme as portas/URLs. Se ele já informou que estão ativos, usar os endereços confirmados. Não iniciar, parar ou reiniciar serviços por conta própria, abrir terminais, elevar privilégios ou criar clusters para viabilizar testes. Mudanças no ambiente exigem autorização explícita.
+- Fluxo de validação combinado: o agente prepara a implementação; o responsável realiza os testes manuais; depois o agente valida os resultados e corrige problemas encontrados. Build e checagem de tipos não substituem testes funcionais.
 
 ## 8. Infraestrutura e operação
 
@@ -161,6 +166,36 @@ Discussão de infraestrutura está pausada. Direção aceita: frontend na Cloudf
 Não tratar preços promocionais discutidos como orçamento permanente, nem estimativas de RAM como capacidade garantida. Não contratar, publicar ou alterar infraestrutura sem autorização.
 
 Antes de produção, definir backups externos com recuperação testada, monitoramento, atualizações, gestão de segredos, implantação e responsabilidades operacionais. Backend e banco na mesma VPS constituem um ponto único de falha.
+
+## Documentação contínua no Notion
+
+### Destino e mapa de páginas
+
+- Índice: https://app.notion.com/p/4166822d0812808a91a7d469cde4f408
+- 1 — Visão geral: https://app.notion.com/p/4166822d081281b4a371c18598b60f38
+- 2 — Funcionalidades: https://app.notion.com/p/4166822d0812816daf87ecda6fc95d0f
+  - 2.1 — Acessos e administração: https://app.notion.com/p/4166822d08128137b303ee7a2bbb92bb
+  - 2.2 — Empresas atendidas: https://app.notion.com/p/4166822d08128101af67c7971f4c066d
+  - 2.3 — Consultorias e ambientes: https://app.notion.com/p/4166822d081281f2a1e8e3e6390befeb
+  - 2.4 — Coleta de equipamentos e insumos: https://app.notion.com/p/4166822d08128118a96df53748493291
+  - 2.5 — Análises, resultados e Excel: https://app.notion.com/p/4166822d08128106a7bbc23e4945568b
+- 3 — Documentação técnica: https://app.notion.com/p/4166822d0812814cb3e8d2456a3e9483
+- 4 — Ambiente de desenvolvimento: https://app.notion.com/p/4166822d08128137a6ecfd13e8c8aef6
+- 5 — Decisões e pendências: https://app.notion.com/p/4166822d081281ff804fc330e24825c6
+- 6 — Histórico de entregas: https://app.notion.com/p/4166822d0812819aad31d51619f2c4d7
+
+### Procedimento obrigatório para agentes
+
+- Antes de alterar um fluxo, consultar pelo MCP do Notion a página relacionada. Antes de escrever, ler seu conteúdo atual e seguir a especificação Markdown do MCP.
+- Atualizar a documentação como parte de entregas que alterem comportamento, API, persistência, configuração ou execução; também registrar decisões explicitamente aprovadas e pendências relevantes descobertas/resolvidas. Não registrar cada comando ou tentativa.
+- Usar as páginas mapeadas; buscar antes de criar para evitar duplicação. Atualizar este mapa se criar ou mover páginas. VStock é referência de organização somente: não alterar suas páginas nem importar suas regras de negócio.
+- Nas páginas funcionais, manter: objetivo, situação atual, fluxo de uso, regras/validações aprovadas, permissões, detalhes técnicos implementados e pendências. Não preencher lacunas por suposição.
+- Separar aprovado, proposto, implementado e validado. Informar testes realmente executados e limites; build não comprova funcionamento integral. Não marcar aprovação humana ou verificação oficial automaticamente.
+- Fazer alterações pontuais, preservando conteúdo manual e fora do escopo. Não substituir páginas inteiras para acrescentar informação; não remover subpáginas sem autorização.
+- Conferir confirmação de gravação e conteúdo relevante salvo; informar links atualizados na entrega. Nunca afirmar sucesso de ferramenta que falhou. Sem credenciais, tokens ou dados pessoais desnecessários no Notion.
+- Se o MCP falhar ou estiver indisponível, registrar a atualização necessária em `docs/notion-pendencias.md` e avisar. Na próxima sincronização, ler o destino e remover somente pendências efetivamente gravadas e conferidas.
+- Notion concentra explicação, decisões e navegação. Scripts, SQL, configurações e instruções executáveis permanecem versionados no repositório. Evitar cópias integrais concorrentes. Código/testes comprovam implementação, mas não substituem aprovação de requisitos. Investigar divergências antes de corrigir documentação.
+- Histórico registra entregas relevantes com data, comportamento, validações, limitações e commit quando disponível. Estoque e acesso externo permanecem em Visão geral/fases até detalhamento; operação ganha seção quando a discussão de infraestrutura for retomada.
 
 ## 9. Pendências e próximos passos
 
@@ -177,7 +212,7 @@ Antes de cada funcionalidade:
 - Aproveitar ideias e materiais existentes; confirmar o que é requisito aprovado, hipótese ou detalhe demonstrativo.
 - Delimitar primeiro fluxo e critérios de aceite, campos, relacionamentos e regras de alteração/exclusão.
 - Definir contratos e erros da API, requisitos de concorrência e histórico conforme necessário.
-- Para cálculos e Excel, validar fórmulas, premissas, unidades, arredondamento e exemplos de referência.
+- Para cálculos e Excel, validar fórmulas, premissas, unidades, arredondamento e exemplos de referência. Exportação Excel será gerada pelo backend a partir dos dados e regras autorizados; conteúdo, formato e biblioteca serão definidos no detalhamento da funcionalidade.
 
 Antes da publicação:
 
