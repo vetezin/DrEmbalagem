@@ -10,8 +10,8 @@ Na pasta do projeto, com Node.js no PATH:
 node servir-demo.cjs
 ```
 
-- Dashboard: http://127.0.0.1:8081/prototipo-dashboard/index.html
-- Mobile: http://127.0.0.1:8081/prototipo-mobile/index.html
+- Dashboard: http://127.0.0.1:8081/prototipo/dashboard/index.html
+- Mobile: http://127.0.0.1:8081/prototipo/mobile/index.html
 
 Mantenha o terminal aberto. Ctrl+C encerra o servidor. Use sempre o mesmo endereço, porta, navegador e perfil para os dois protótipos: `localhost` e `127.0.0.1` são origens diferentes. Não abra os HTMLs diretamente por `file://`, pois o compartilhamento entre páginas depende da mesma origem HTTP.
 
@@ -32,7 +32,7 @@ O cenário permite uma empresa e uma consultoria por rodada. Confirmar novamente
 
 ## Cálculos e limites
 
-`compartilhado/mock.js` é a fonte única do catálogo, cadastro de exemplo, parâmetros anuais e funções de cálculo. O estado da empresa e da coleta fica no `localStorage`, na chave `doutor-embalagem.demo.v1`.
+`prototipo/compartilhado/mock.js` é a fonte única do catálogo, cadastro de exemplo, parâmetros anuais e funções de cálculo. O estado da empresa e da coleta fica no `localStorage`, na chave `doutor-embalagem.demo.v1`.
 
 Os parâmetros das abas **Sacos de Lixo**, **Sabonete Líquido**, **Papel Toalha** e **Papel Higiênico** da planilha são reproduzidos no cenário financeiro. Custo = quantidade anual × preço unitário; consumo físico = quantidade × conteúdo/peso; economia = atual − proposto. Não há conversão automática entre litros, folhas, metros e kg.
 
@@ -52,4 +52,4 @@ node --test tests/mock.test.cjs
 
 Os testes cobrem compartilhamento do cadastro, vínculo com a empresa, restrição e idempotência do envio, quantidades persistidas, cálculos conferidos com a planilha, reset e falhas no armazenamento. O roteiro também foi percorrido no Playwright com duas abas, recarga e formulários preenchidos.
 
-A pasta não é um repositório Git; nenhum commit ou push foi feito.
+O protótipo está versionado junto ao repositório do projeto.
